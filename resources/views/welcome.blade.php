@@ -7,6 +7,22 @@
     <title>Document</title>
 </head>
 <body>
+    <div class="">
+        @if (Route::has('login'))
+                <div class="top-right links">
+                    @auth
+                        <a href="{{ route('home') }}">Home</a>
+                    @else
+                        <a href="{{ route('login') }}">Login</a>
+                        <a href="{{ route('register') }}">Register</a>
+                    @endauth
+                </div>
+            @endif
+    </div>
+    {{-- <div class="links">
+        <a href="{{ route('login') }}">Login</a>
+        <a href="{{ route('register') }}">Register</a>
+    </div> --}}
 <h1>test</h1>
 <h2>Faisal</h2>
 <h3>
