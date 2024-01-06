@@ -35,9 +35,9 @@ class AdminController extends Controller
         return redirect()->back()->with('message', 'Category Deleted Successfully!!!');
     }
 
-// ================================
-// ======      product      =======
-// ================================
+// ===================================
+// ====== Admin  product      ========
+// ===================================
 
     public function view_product(){
         $categorys = Category::all();
@@ -94,7 +94,6 @@ class AdminController extends Controller
 
     public function update_product_confirm(Request $request ,$id){
 
-
         $rulls = [
             'title' => 'required',
             'description' => 'required',
@@ -124,7 +123,6 @@ class AdminController extends Controller
             Storage::delete($product->image);
         }
         $product->image = 'product/' . $imageName;
-
 
         }
         $product->save();
