@@ -15,17 +15,22 @@
             <div class="content-wrapper">
                 <div class="row my-5">
                     <div class="col-md-12">
+                        @if(session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
                         <table class="table bg-white ">
                             <thead>
                               <tr>
                                 <th class="text-black" scope="col">Id</th>
                                 <th class="text-black" scope="col">Product Title</th>
                                 <th class="text-black" scope="col">Description</th>
-                                <th class="text-black" scope="col">Product Category</th>
-                                <th class="text-black" scope="col">Product  Quantity</th>
-                                <th class="text-black" scope="col">Product Price</th>
-                                <th class="text-black" scope="col"> Discount Price</th>
-                                <th class="text-black" scope="col">Product Image</th>
+                                <th class="text-black" scope="col">Category</th>
+                                <th class="text-black" scope="col">Quantity</th>
+                                <th class="text-black" scope="col">Price</th>
+                                <th class="text-black" scope="col">Discount Price</th>
+                                <th class="text-black" scope="col">Image</th>
                                 <th class="text-black" scope="col">Action</th>
 
                               </tr>
@@ -58,7 +63,8 @@
                                         <img src="{{$product->image}}" alt="">
                                     </td>
                                     <td class="text-black">
-                                        <a href="#" class="btn btn-danger">Delete</a>
+                                        <a href="{{ route('delete_product',$product->id) }}" class="btn btn-danger">Delete</a>
+                                        <a href="{{ route('update_product',$product->id) }}" class="btn btn-success">Edit</a>
                                     </td>
                                   </tr>
                                 @endforeach

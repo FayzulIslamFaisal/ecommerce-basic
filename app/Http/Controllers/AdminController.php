@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
@@ -78,7 +79,57 @@ class AdminController extends Controller
         return view('admin.show-product',compact('products'));
     }
 
+    public function delete_product($id){
+        $product = Product::findOrFail($id);
+        $product->delete();
+        return redirect()->back()->with('success', 'Product Delete successfully!!!');
+    }
 
+    public function update_product($id) {
+        $product = Product::findOrFail($id);
+        $categorys = Category::all();
+        return view('admin.update-product', compact('product','categorys'));
+    }
+
+
+    public function update_product_confirm(Request $request ,$id){
+
+
+        $rulls = [
+            'title' => 'required',
+            'description' => 'required',
+            'category' => 'required',
+            'quantity' => 'required|numeric',
+            'price' => 'required|numeric',
+            'dis_price' => 'required|min:1',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+        ];
+        $this->validate($request,$rulls);
+
+        $product =  Product::findOrFail($id);
+        // Set product attributes from the request data
+        $product->title = $request->title;
+        $product->description = Str::limit($request->input('description'), 10);
+        $product->category = $request->category;
+        $product->quantity = $request->quantity;
+        $product->price = $request->price;
+        $product->discount_price = $request->dis_price;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('product'), $imageName);
+            $product->image = 'product/' . $imageName;
+            // Delete old image if it exists
+        if ($product->image) {
+            Storage::delete($product->image);
+        }
+        $product->image = 'product/' . $imageName;
+
+
+        }
+        $product->save();
+        return redirect()->route('show_product')->with('success', 'Product Updated successfully');
+    }
 
 
 
