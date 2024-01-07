@@ -16,7 +16,7 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get('/redirect',[HomeController::class,'redirect']);
+Route::get('/redirect',[HomeController::class,'redirect'])->middleware('auth','verified');
 Route::get('/view_category',[AdminController::class,'view_category'])->name('view_category');
 Route::get('/delete_category/{id}',[AdminController::class,'delete_category'])->name('delete_category');
 Route::post('/add_category',[AdminController::class,'add_category'])->name('add_category');
@@ -34,5 +34,15 @@ Route::post('/update_product_confirm/{id}',[AdminController::class,'update_produ
 Route::get('/product_details/{id}',[HomeController::class,'product_details'])->name('product_details');
 // -------------------------add to cart Route---------------------------------
 Route::post('/add_cart/{id}',[HomeController::class,'add_cart'])->name('add_cart');
-
+Route::get('/show_cart',[HomeController::class,'show_cart'])->name('show_cart');
+Route::get('/remove_cart/{id}',[HomeController::class,'remove_cart'])->name('remove_cart');
+// -------------------------Order Route---------------------------------
+Route::get('/cash_order',[HomeController::class,'cash_order'])->name('cash_order');
+// -------------------------stripe Route---------------------------------
+Route::get('stripe/{totalprice}', [HomeController::class, 'stripe'])->name('stripe');
+// -------------------------Order Admin Route ---------------------------------
+Route::get('/order', [AdminController::class, 'orderFunction'])->name('order');
+Route::get('/delivered/{id}', [AdminController::class, 'deliveredFunction'])->name('delivered');
+Route::get('/print_pdf/{id}', [AdminController::class, 'print_pdfFunction'])->name('print_pdf');
+Route::get('/search', [AdminController::class, 'searchFunction'])->name('search');
 

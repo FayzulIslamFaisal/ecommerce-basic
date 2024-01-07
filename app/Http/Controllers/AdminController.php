@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Order;
+use PDF;
 
 class AdminController extends Controller
 {
@@ -129,6 +131,34 @@ class AdminController extends Controller
         return redirect()->route('show_product')->with('success', 'Product Updated successfully');
     }
 
+// -------------------------Order Admin Functoin ---------------------------------
+    public function orderFunction() {
+        $orders = Order::latest()->simplePaginate(5);
+        return view('admin.order',compact('orders') );
+    }
+
+    public function deliveredFunction($id){
+        $order = Order::findOrFail($id);
+        $order->delivery_status = "delivered";
+        $order->payment_status="Paid";
+        $order->save();
+        return redirect()->back();
+
+    }
+    // -------------------------Order PDF Funtion ---------------------------------
+    public function print_pdfFunction($id) {
+        $orders = Order::findOrFail($id);
+        $pdf = PDF::loadView('admin.myPDF', compact('orders'));
+        return $pdf->download('order_details.pdf');
+    }
+// -------------------------Order Search Funtion ---------------------------------
+    public function searchFunction(Request $request) {
+        $searchText = $request->search;
+        $orders = Order::where('name', 'LIKE', " %$searchText% ")
+        ->orWhere('phone', 'LIKE', " %$searchText% ")
+        ->orWhere('product_title', 'LIKE', " %$searchText% ")->get();
+        return view('admin.order', compact('orders'));
+    }
 
 
 
