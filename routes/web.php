@@ -40,6 +40,7 @@ Route::get('/remove_cart/{id}',[HomeController::class,'remove_cart'])->name('rem
 Route::get('/cash_order',[HomeController::class,'cash_order'])->name('cash_order');
 // -------------------------stripe Route---------------------------------
 Route::get('stripe/{totalprice}', [HomeController::class, 'stripe'])->name('stripe');
+Route::post('stripe', [HomeController::class, 'stripePost'])->name('stripe.post');
 // -------------------------Order Admin Route ---------------------------------
 Route::get('/order', [AdminController::class, 'orderFunction'])->name('order');
 Route::get('/delivered/{id}', [AdminController::class, 'deliveredFunction'])->name('delivered');
