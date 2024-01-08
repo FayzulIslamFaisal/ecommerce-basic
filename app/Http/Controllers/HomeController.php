@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\Comment;
+use App\Models\Reply;
 use Session;
 use Stripe;
 
@@ -18,7 +20,10 @@ class HomeController extends Controller
     public function index() {
         // shoow product item
         $products = Product::latest()->simplePaginate(3);
-        return view('home.userpage',compact('products') );
+        $comments = Comment::all();
+        // $comments = Comment::orderby('id','desc')->get();
+        $reply = Reply::all();
+        return view('home.userpage',compact('products','comments','reply') );
     }
     public function redirect() {
         $usertype = Auth::User()->usertype;
@@ -40,7 +45,10 @@ class HomeController extends Controller
          else {
             // shoow product item
             $products = Product::latest()->simplePaginate(3);
-            return view('home.userpage',compact('products') );
+            $comments = Comment::all();
+            // $comments = Comment::orderby('id','desc')->get();
+            $reply = Reply::all();
+            return view('home.userpage',compact('products','reply','comments') );
         }
 
     }
@@ -166,6 +174,53 @@ class HomeController extends Controller
         Session::flash('success', 'Payment Successfull!');
 
         return back();
+    }
+
+    public function show_order(){
+        if (Auth::id()) {
+            $user    = Auth::user();
+            $user_id = $user->id;
+            $orders = Order::where('user_id', '=', $user_id)->get();
+            return view('home.order',compact('orders'));
+        }else{
+            return redirect('login');
+        }
+    }
+    public function cancel_order($id){
+        $order = Order::findOrFail($id);
+        $order->delivery_status = 'You Cancel The Order';
+        $order->save();
+        return redirect()->back();
+    }
+// -------------------------add comment   ---------------------------------
+    public function add_comment(Request $request) {
+        if (Auth::id()) {
+            $comment          = new Comment();
+            $comment->name    = Auth::user()->name;
+            $comment->user_id = Auth::user()->id;
+            $comment->comment = $request->comment;
+
+            $comment->save();
+            return redirect()->back();
+
+        } else {
+            return redirect('login');
+        }
+    }
+    public function add_reply(Request $request) {
+        if (Auth::id()) {
+           $reply = new Reply();
+           $reply->name = Auth::user()->name;
+           $reply->user_id = Auth::user()->id;
+           $reply->comment_id = $request->commentId ;
+           $reply->reply = $request->reply ;
+           $reply->save();
+           return redirect()->back();
+
+        } else {
+           return redirect('login');
+        }
+
     }
 
 

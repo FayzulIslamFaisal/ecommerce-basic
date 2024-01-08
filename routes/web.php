@@ -46,4 +46,11 @@ Route::get('/order', [AdminController::class, 'orderFunction'])->name('order');
 Route::get('/delivered/{id}', [AdminController::class, 'deliveredFunction'])->name('delivered');
 Route::get('/print_pdf/{id}', [AdminController::class, 'print_pdfFunction'])->name('print_pdf');
 Route::get('/search', [AdminController::class, 'searchFunction'])->name('search');
+// -------------------------Show Order Home Route ---------------------------------
+Route::get('/show_order',[HomeController::class,'show_order'])->name('show_order');
+Route::get('/cancel_order/{id}',[HomeController::class,'cancel_order'])->name('cancel_order');
 
+// -------------------------add comment Home Route ---------------------------------
+Route::post('/add_comment',[HomeController::class,'add_comment'])->name('add_comment');
+
+Route::post('/add_reply',[HomeController::class,'add_reply'])->name('add_reply');
