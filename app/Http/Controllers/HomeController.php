@@ -20,8 +20,8 @@ class HomeController extends Controller
     public function index() {
         // shoow product item
         $products = Product::latest()->simplePaginate(3);
-        $comments = Comment::all();
-        // $comments = Comment::orderby('id','desc')->get();
+        // $comments = Comment::all();
+        $comments = Comment::orderby('id','desc')->get();
         $reply = Reply::all();
         return view('home.userpage',compact('products','comments','reply') );
     }
@@ -46,7 +46,7 @@ class HomeController extends Controller
             // shoow product item
             $products = Product::latest()->simplePaginate(3);
             $comments = Comment::all();
-            // $comments = Comment::orderby('id','desc')->get();
+            $comments = Comment::orderby('id','desc')->get();
             $reply = Reply::all();
             return view('home.userpage',compact('products','reply','comments') );
         }
@@ -224,5 +224,16 @@ class HomeController extends Controller
     }
 
 
+    // search product function-------------
+
+    public function search_product(Request $request) {
+        $comments = Comment::orderby('id','desc')->get();
+        $reply = Reply::all();
+        $search_text = $request->searchpro;
+        $products = Product::where('title','LIKE',"%$search_text%")
+        ->orWhere('category','LIKE',"%$search_text%")
+        ->simplePaginate(10);
+        return view('home.userpage', compact('products','comments','reply'));
+    }
 
 }

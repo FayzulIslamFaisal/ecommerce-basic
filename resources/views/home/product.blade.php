@@ -4,6 +4,18 @@
           <h2>
              Our <span>products</span>
           </h2>
+
+       </div>
+       <div class="row">
+        <div class="col-md-8 offset-2">
+            <form method="GET" action=" {{ route('search_product')}}">
+                @csrf
+                <div class="form-group d-flex align-items-center ">
+                    <input type="search" name="searchpro" class="form-control mb-0"  placeholder="Search Product">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+        </div>
        </div>
        <div class="row">
 
